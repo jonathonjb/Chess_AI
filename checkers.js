@@ -71,6 +71,7 @@ function startGame(){
 function turnEnds(){
     playerTurn = (playerTurn == RED) ? BLACK : RED;
     disableBoard();
+    infoBoxUpdate();
     if(teamCanAttack()){
         enableAttackingPieces();
     }

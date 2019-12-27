@@ -34,3 +34,9 @@ img {
     max-width: 100%;
     max-width: 100%;
 }
+
+#infoBox {
+    width: 6vw;
+    height: 6vw;
+    display: flex;
+}

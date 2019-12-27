@@ -24,15 +24,7 @@ function initializeVisualBoard(){
     let visualBoardRow = [];
     for(let i = 0; i < tiles.length; i++){
         tiles[i].setAttribute("id", row + "" + col)
-        if(backgroundIsAlt){
-            tiles[i].style.background = LIGHT_BACKGROUND;
-        }
-        else{
-            tiles[i].setAttribute("ondrop", "handleDrop(event)")
-            tiles[i].setAttribute("ondragover", "handleDragOver(event)");
-            tiles[i].style.background = DARK_BACKGROUND;
-        }
-
+        tiles[i].style.background = backgroundIsAlt ? LIGHT_BACKGROUND : DARK_BACKGROUND;
         visualBoardRow.push(tiles[i]);
 
         col++;
@@ -48,6 +40,7 @@ function initializeVisualBoard(){
     }
 
     initializePieces();
+    initializeInfoBox();
 }
 
 function initializePieces(){
@@ -59,13 +52,9 @@ function initializePieces(){
         if(tiles[i].style.background == DARK_BACKGROUND){
             let blackPieceImage = document.createElement("img");
             blackPieceImage.setAttribute("src", BLACK_PIECE_IMAGE_PATH);
-            blackPieceImage.setAttribute("ondragstart", "handleDrag(event)");
             blackPieceImage.setAttribute("id", "blackPiece" + nextBlackId);
             nextBlackId++;
             tiles[i].appendChild(blackPieceImage);
-
-            tiles[i].removeAttribute("ondrop")
-            tiles[i].removeAttribute("ondragover");
         }
     }
 
@@ -75,15 +64,26 @@ function initializePieces(){
         if(tiles[i].style.background == DARK_BACKGROUND){
             let redPieceImage = document.createElement("img");
             redPieceImage.setAttribute("src", RED_PIECE_IMAGE_PATH);
-            redPieceImage.setAttribute("ondragstart", "handleDrag(event)");
             redPieceImage.setAttribute("id", "redPiece" + nextRedId);
             nextRedId++;
             tiles[i].appendChild(redPieceImage);
-
-            tiles[i].removeAttribute("ondrop");
-            tiles[i].removeAttribute("ondragover");
         }
     }
+}
+
+function initializeInfoBox(){
+    let infoBoxRed = document.getElementById("infoBoxRed");
+    let infoBoxBlack = document.getElementById("infoBoxBlack");
+    infoBoxRed.src = RED_PIECE_IMAGE_PATH;
+    infoBoxBlack.src = BLACK_PIECE_IMAGE_PATH;
+    infoBoxBlack.style.opacity = "0.3";
+}
+
+function infoBoxUpdate(){
+    let infoBoxRed = document.getElementById("infoBoxRed");
+    let infoBoxBlack = document.getElementById("infoBoxBlack");
+    infoBoxBlack.style.opacity = (playerTurn == BLACK) ? "1" : "0.3";
+    infoBoxRed.style.opacity = (playerTurn == RED) ? "1" : "0.3";
 }
 
 function disableBoard(){
@@ -96,8 +96,7 @@ function disableBoard(){
 
             if(tile.childElementCount === 1){
                 let piece = tile.childNodes[0];
-                piece.removeAttribute("ondragstart");
-                piece.setAttribute("draggable", "false");
+                disablePieceAttributes(piece);
             }
         }
     }
@@ -113,8 +112,7 @@ function enableTeam(){
 
                 if((playerTurn == RED && piece.id.substring(0, 3) === "red") ||
                         playerTurn == BLACK && piece.id.substring(0, 5) === "black"){
-                    piece.setAttribute("ondragstart", "handleDrag(event)");
-                    piece.setAttribute("draggable", "true");
+                    enablePieceAttributes(piece);
                 }
             }
         }
@@ -126,16 +124,27 @@ function enableAttackingPieces(){
     positionsThatCanAttack.forEach(position => {
         let tile = visualBoard[position[0]][position[1]];
         let piece = tile.childNodes[0];
-        piece.setAttribute("ondragstart", "handleDrag(event)");
-        piece.setAttribute("draggable", "true");
+        enablePieceAttributes(piece);
     });
 }
 
 function enablePiece(position){
     let tile = visualBoard[position[0]][position[1]];
     let piece = tile.childNodes[0];
+    enablePieceAttributes(piece);
+}
+
+function enablePieceAttributes(piece){
     piece.setAttribute("ondragstart", "handleDrag(event)");
     piece.setAttribute("draggable", "true");
+    piece.setAttribute("onMouseOver", "this.style.cursor='pointer'");
+}
+
+function disablePieceAttributes(piece){
+    piece.removeAttribute("ondragstart");
+    piece.setAttribute("draggable", "false");
+    piece.removeAttribute("onmouseover");
+    piece.style.removeProperty("cursor");
 }
 
 function enableAttacks(currPosition){
@@ -160,8 +169,6 @@ function convertToKingPieceImage(position){
     if((board[position[0]][position[1]])[0] == RED){
         let kingRedPieceImage = document.createElement("img");
         kingRedPieceImage.setAttribute("src", KING_RED_PIECE_IMAGE_PATH);
-
-        // FIX THIS TO MAKE ID UNIQUE ALWAYS
         kingRedPieceImage.setAttribute("id", "redKingPiece" + nextRedId);
         nextRedId++;
         tile.appendChild(kingRedPieceImage);
@@ -169,8 +176,6 @@ function convertToKingPieceImage(position){
     else{
         let kingBlackPieceImage = document.createElement("img");
         kingBlackPieceImage.setAttribute("src", KING_BLACK_PIECE_IMAGE_PATH);
-
-        // FIX THIS TO MAKE ID UNIQUE ALWAYS
         kingBlackPieceImage.setAttribute("id", "blackKingPiece" + nextBlackId);
         nextBlackId++;
         tile.appendChild(kingBlackPieceImage);
@@ -201,8 +206,8 @@ function handleDrop(event){
     let currTile = event.target;
     currTile.appendChild(document.getElementById(imageId));
 
-    event.target.removeAttribute("ondrop")
-    event.target.removeAttribute("ondragover");
+    currTile.removeAttribute("ondrop")
+    currTile.removeAttribute("ondragover");
 
     let previousTileId = event.dataTransfer.getData("previousTile");
     let previousTile = document.getElementById(previousTileId);
