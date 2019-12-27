@@ -37,6 +37,7 @@ function initializeLogicBoard(){
     for(let row = 0; row < 3; row++){
         for(let col = startingCol, piecesInRow = 0; piecesInRow < 4; col += 2, piecesInRow++){
             board[row][col] = [BLACK, STANDARD_PIECE];
+            numOfBlackPieces++;
         }
         if(startingCol == 1){
             startingCol = 0;
@@ -44,13 +45,13 @@ function initializeLogicBoard(){
         else{
             startingCol = 1;
         }
-        numOfRedPieces++;
     }
 
     // initalizes the red pieces
     for(let row = 5; row < 8; row++){
         for(let col = startingCol, piecesInRow = 0; piecesInRow < 4; col += 2, piecesInRow++){
             board[row][col] = [RED, STANDARD_PIECE]
+            numOfRedPieces++;
         }
         if(startingCol == 1){
             startingCol = 0;
@@ -59,19 +60,26 @@ function initializeLogicBoard(){
             startingCol = 1;
         }
     }
-    numOfBlackPieces++;
 }
 
 function startGame(){
     playerTurn = RED;
     disableBoard();
     enableTeam();
+    
 }
 
 function turnEnds(){
-    playerTurn = (playerTurn == RED) ? BLACK : RED;
     disableBoard();
+
+    if((playerTurn == RED && numOfBlackPieces == 0) || (playerTurn == BLACK && numOfRedPieces == 0)){
+        playerWins(playerTurn);
+        return;
+    }
+
+    playerTurn = (playerTurn == RED) ? BLACK : RED;
     infoBoxUpdate();
+    
     if(teamCanAttack()){
         enableAttackingPieces();
     }
@@ -178,7 +186,11 @@ function attack(startPosition, endPosition){
     let enemyCol = startCol + ((endCol - startCol) / 2);
     let enemyPosition = [enemyRow, enemyCol];
 
+    let enemyColor = board[enemyRow][enemyCol][0];
     board[enemyRow][enemyCol] = [NO_COLOR, NO_PIECE];
+    numOfBlackPieces = (enemyColor == BLACK) ? numOfBlackPieces - 1 : numOfBlackPieces;
+    numOfRedPieces = (enemyColor == RED) ? numOfRedPieces - 1 : numOfRedPieces;
+
     removePiece(enemyPosition);
 }
 

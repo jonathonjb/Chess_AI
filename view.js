@@ -86,6 +86,18 @@ function infoBoxUpdate(){
     infoBoxRed.style.opacity = (playerTurn == RED) ? "1" : "0.3";
 }
 
+function playerWins(winner){
+    fadeBoard();
+    let winnersBox = document.getElementById("winnersBox");
+    winnersBox.style.display = "inline";
+    let headerMessage = document.createElement("h3");
+    let color = (winner == RED) ? "RED" : "BLACK";
+    let message = document.createTextNode(color + " WINS");
+    headerMessage.style.color = color;
+    headerMessage.appendChild(message);
+    winnersBox.appendChild(headerMessage);
+}
+
 function disableBoard(){
     for(let row = 0; row < BOARD_SIZE; row++){
         for(let col = 0; col < BOARD_SIZE; col++){
@@ -180,6 +192,11 @@ function convertToKingPieceImage(position){
         nextBlackId++;
         tile.appendChild(kingBlackPieceImage);
     }
+}
+
+function fadeBoard(){
+    let pageBoard = document.getElementById("board");
+    pageBoard.style.opacity = "0.3";
 }
 
 function handleClick(id){

@@ -10,11 +10,11 @@ h1 {
 }
 
 #board {
-    padding: 0;
-    margin: 0;
-    width: 48vw;
+    /*width: 48vw;*/
+    width: 400px;
     border-style: solid;
     border-width: 1px;
+    margin-bottom: 50px;
 }
 
 .row {
@@ -26,8 +26,10 @@ h1 {
 }
 
 .tile {
-    width: 6vw;
-    height: 6vw;
+    /*width: 6vw;
+    height: 6vw;*/
+    width: 50px;
+    height: 50px;
 }
 
 img {
@@ -36,7 +38,10 @@ img {
 }
 
 #infoBox {
-    width: 6vw;
-    height: 6vw;
-    display: flex;
+    /*width: 6vw;
+    height: 6vw;*/
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    justify-content: space-evenly;
 }
