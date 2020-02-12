@@ -21,6 +21,8 @@ function initializeVisualBoard(){
     let col = 0;
 
     visualBoard = [];
+    nextBlackId = 0;
+    nextRedId = 0;
     let visualBoardRow = [];
     for(let i = 0; i < tiles.length; i++){
         tiles[i].setAttribute("id", row + "" + col)
@@ -37,37 +39,6 @@ function initializeVisualBoard(){
             visualBoardRow = [];
         }
         backgroundIsAlt = !backgroundIsAlt;
-    }
-
-    initializePieces();
-    initializeInfoBox();
-}
-
-function initializePieces(){
-    let tiles = document.getElementsByClassName("tile");
-
-    // initializes the black pieces
-    nextBlackId = 0;
-    for(let i = 0; i < 24; i++){
-        if(tiles[i].style.background == DARK_BACKGROUND){
-            let blackPieceImage = document.createElement("img");
-            blackPieceImage.setAttribute("src", BLACK_PIECE_IMAGE_PATH);
-            blackPieceImage.setAttribute("id", "blackPiece" + nextBlackId);
-            nextBlackId++;
-            tiles[i].appendChild(blackPieceImage);
-        }
-    }
-
-    // initializes the red pieces
-    nextRedId = 0;
-    for(let i = 40; i < tiles.length; i++){
-        if(tiles[i].style.background == DARK_BACKGROUND){
-            let redPieceImage = document.createElement("img");
-            redPieceImage.setAttribute("src", RED_PIECE_IMAGE_PATH);
-            redPieceImage.setAttribute("id", "redPiece" + nextRedId);
-            nextRedId++;
-            tiles[i].appendChild(redPieceImage);
-        }
     }
 }
 
@@ -169,6 +140,32 @@ function enableAttacks(currPosition){
     });
 }
 
+function addPiece(pieceTuple, position){
+    let tile = visualBoard[position[0]][position[1]];
+    let pieceImage = document.createElement("img");
+    if(pieceTuple[0] == RED){
+        pieceImage.setAttribute("id", "redPiece" + nextRedId);
+        if(pieceTuple[1] == STANDARD_PIECE){
+            pieceImage.setAttribute("src", RED_PIECE_IMAGE_PATH);
+        }
+        else{
+            pieceImage.setAttribute("src", KING_RED_PIECE_IMAGE_PATH);
+        }
+        nextRedId++;
+    }
+    else if(pieceTuple[0] == BLACK){
+        pieceImage.setAttribute("id", "blackPiece" + nextBlackId);
+        if(pieceTuple[1] == STANDARD_PIECE){
+            pieceImage.setAttribute("src", BLACK_PIECE_IMAGE_PATH);
+        }
+        else{
+            pieceImage.setAttribute("src", KING_BLACK_PIECE_IMAGE_PATH);
+        }
+        nextBlackId++;
+    }
+    tile.appendChild(pieceImage);
+}
+
 function removePiece(position){
     let tile = visualBoard[position[0]][position[1]];
     tile.removeChild(tile.childNodes[0]);
@@ -241,4 +238,13 @@ function handleDrop(event){
     let endPosition = [endRow, endCol];
 
     move(startPosition, endPosition);
+}
+
+// LEFT OFF HERE; IMPLEMENT THIS FUNCTION THEN WORK ON AI
+function movePieceView(posOne, posTwo){
+    let tileOne = visualBoard[posOne[0]][posOne[1]];
+    let tileTwo = visualBoard[posTwo[0]][posTwo[1]];
+
+    removePiece(posOne);
+    addPiece(board[posTwo[0]][posTwo[1]], posTwo);
 }

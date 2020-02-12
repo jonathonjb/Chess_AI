@@ -17,9 +17,14 @@ let playerTurn;
 let numOfRedPieces = 0;
 let numOfBlackPieces = 0;
 
+let user = RED;
+let computer = BLACK;
+
 function initializeBoard(){
-    initializeLogicBoard();
     initializeVisualBoard();
+    initializeLogicBoard();
+
+    initializeInfoBox();
 }
 
 function initializeLogicBoard(){
@@ -33,10 +38,12 @@ function initializeLogicBoard(){
     }
 
     // initalizes the black pieces
-    let startingCol = 1;
+    /*let startingCol = 1;
     for(let row = 0; row < 3; row++){
         for(let col = startingCol, piecesInRow = 0; piecesInRow < 4; col += 2, piecesInRow++){
-            board[row][col] = [BLACK, STANDARD_PIECE];
+            let pieceTuple = [BLACK, STANDARD_PIECE];
+            board[row][col] = pieceTuple;
+            addPiece(pieceTuple, [row, col]);
             numOfBlackPieces++;
         }
         if(startingCol == 1){
@@ -50,7 +57,9 @@ function initializeLogicBoard(){
     // initalizes the red pieces
     for(let row = 5; row < 8; row++){
         for(let col = startingCol, piecesInRow = 0; piecesInRow < 4; col += 2, piecesInRow++){
-            board[row][col] = [RED, STANDARD_PIECE]
+            let pieceTuple = [RED, STANDARD_PIECE];
+            board[row][col] = pieceTuple;
+            addPiece(pieceTuple, [row, col]);
             numOfRedPieces++;
         }
         if(startingCol == 1){
@@ -59,14 +68,28 @@ function initializeLogicBoard(){
         else{
             startingCol = 1;
         }
-    }
+    }*/
+
+    let pieceTuple = [RED, KING_PIECE];
+    board[0][3] = pieceTuple;
+    addPiece(pieceTuple, [0, 3]);
+    numOfRedPieces++;
+
+    pieceTuple = [BLACK, KING_PIECE];
+    board[1][4] = pieceTuple;
+    addPiece(pieceTuple, [1, 4]);
+    numOfBlackPieces++;
+
+    pieceTuple = [BLACK, KING_PIECE];
+    board[1][2] = pieceTuple;
+    addPiece(pieceTuple, [1, 2]);
+    numOfBlackPieces++;
 }
 
 function startGame(){
     playerTurn = RED;
     disableBoard();
     enableTeam();
-    
 }
 
 function turnEnds(){
@@ -85,6 +108,9 @@ function turnEnds(){
     }
     else{
         enableTeam();
+        if(playerTurn == computer){
+            aiStartTurn();
+        }
     }
 }
 
