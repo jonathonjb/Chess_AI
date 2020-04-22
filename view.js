@@ -1,250 +1,135 @@
+const backgrounds = {
+    light: "rgb(242, 242, 242)", 
+    dark: "rgb(115, 115, 115)"
+};
 
-// constants
-const LIGHT_BACKGROUND = "rgb(242, 242, 242)";
-const DARK_BACKGROUND = "rgb(115, 115, 115)";
+const imagePaths = {
+    whiteKing: "Images/whiteKing.png",
+    whiteQueen: "Images/whiteQueen.png",
+    whiteRook: "Images/whiteRook.png",
+    whiteBishop: "Images/whiteBishop.png",
+    whiteKnight: "Images/whiteKnight.png",
+    whitePawn: "Images/whitePawn.png",
+    blackKing: "Images/blackKing.png",
+    blackQueen: "Images/blackQueen.png",
+    blackRook: "Images/blackRook.png",
+    blackBishop: "Images/blackBishop.png",
+    blackKnight: "Images/blackKnight.png",
+    blackPawn: "Images/blackPawn.png"
+};
 
-const RED_PIECE_IMAGE_PATH = "Images/red_piece.png";
-const BLACK_PIECE_IMAGE_PATH = "Images/black_piece.png";
-const KING_RED_PIECE_IMAGE_PATH = "Images/king_red_piece.png";
-const KING_BLACK_PIECE_IMAGE_PATH = "Images/king_black_piece.png";
+visualBoard = [];
 
-// global variables
-let visualBoard;
-
-let nextRedId;
-let nextBlackId;
-
-function initializeVisualBoard(){
+function initializeView(){
     let tiles = document.getElementsByClassName("tile");
-    let backgroundIsAlt = true;
+
+    let visualBoardRow = [];
     let row = 0;
     let col = 0;
-
-    visualBoard = [];
-    nextBlackId = 0;
-    nextRedId = 0;
-    let visualBoardRow = [];
+    let alt = true;
     for(let i = 0; i < tiles.length; i++){
         tiles[i].setAttribute("id", row + "" + col)
-        tiles[i].style.background = backgroundIsAlt ? LIGHT_BACKGROUND : DARK_BACKGROUND;
+        tiles[i].style.background = alt ? backgrounds.light : backgrounds.dark;
         visualBoardRow.push(tiles[i]);
 
         col++;
-        if(col == BOARD_SIZE){
+        if(col == logics.size){
             col = 0;
             row++;
-            backgroundIsAlt = !backgroundIsAlt;
+            alt = !alt;
 
             visualBoard.push(visualBoardRow);
             visualBoardRow = [];
         }
-        backgroundIsAlt = !backgroundIsAlt;
+        alt = !alt;
     }
+
+    //initializeInfoBox();
 }
 
-function initializeInfoBox(){
-    let infoBoxRed = document.getElementById("infoBoxRed");
-    let infoBoxBlack = document.getElementById("infoBoxBlack");
-    infoBoxRed.src = RED_PIECE_IMAGE_PATH;
-    infoBoxBlack.src = BLACK_PIECE_IMAGE_PATH;
-    infoBoxBlack.style.opacity = "0.3";
-}
-
-function infoBoxUpdate(){
-    let infoBoxRed = document.getElementById("infoBoxRed");
-    let infoBoxBlack = document.getElementById("infoBoxBlack");
-    infoBoxBlack.style.opacity = (playerTurn == BLACK) ? "1" : "0.3";
-    infoBoxRed.style.opacity = (playerTurn == RED) ? "1" : "0.3";
-}
-
-function playerWins(winner){
-    fadeBoard();
-    let winnersBox = document.getElementById("winnersBox");
-    winnersBox.style.display = "inline";
-    let headerMessage = document.createElement("h3");
-    let color = (winner == RED) ? "RED" : "BLACK";
-    let message = document.createTextNode(color + " WINS");
-    headerMessage.style.color = color;
-    headerMessage.appendChild(message);
-    winnersBox.appendChild(headerMessage);
-}
-
-function disableBoard(){
-    for(let row = 0; row < BOARD_SIZE; row++){
-        for(let col = 0; col < BOARD_SIZE; col++){
-            let tile = visualBoard[row][col];
-
-            tile.removeAttribute("ondrop");
-            tile.removeAttribute("ondragover");
-
-            if(tile.childElementCount === 1){
-                let piece = tile.childNodes[0];
-                disablePieceAttributes(piece);
-            }
-        }
-    }
-}
-
-function enableTeam(){
-    for(let row = 0; row < BOARD_SIZE; row++){
-        for(let col = 0; col < BOARD_SIZE; col++){
-            let tile = visualBoard[row][col];
-
-            if(tile.childElementCount === 1){
-                let piece = tile.childNodes[0];
-
-                if((playerTurn == RED && piece.id.substring(0, 3) === "red") ||
-                        playerTurn == BLACK && piece.id.substring(0, 5) === "black"){
-                    enablePieceAttributes(piece);
-                }
-            }
-        }
-    }
-}
-
-function enableAttackingPieces(){
-    let positionsThatCanAttack = getPositionsThatCanAttack();
-    positionsThatCanAttack.forEach(position => {
-        let tile = visualBoard[position[0]][position[1]];
-        let piece = tile.childNodes[0];
-        enablePieceAttributes(piece);
-    });
-}
-
-function enablePiece(position){
-    let tile = visualBoard[position[0]][position[1]];
-    let piece = tile.childNodes[0];
-    enablePieceAttributes(piece);
-}
-
-function enablePieceAttributes(piece){
-    piece.setAttribute("ondragstart", "handleDrag(event)");
-    piece.setAttribute("draggable", "true");
-    piece.setAttribute("onMouseOver", "this.style.cursor='pointer'");
-}
-
-function disablePieceAttributes(piece){
-    piece.removeAttribute("ondragstart");
-    piece.setAttribute("draggable", "false");
-    piece.removeAttribute("onmouseover");
-    piece.style.removeProperty("cursor");
-}
-
-function enableAttacks(currPosition){
-    let validPositions = getAllValidPositions(currPosition);
-    validPositions.forEach(function(validPosition){
-        let nextRow = validPosition[0];
-        let nextCol = validPosition[1];
-        visualBoard[nextRow][nextCol].setAttribute("ondrop", "handleDrop(event)")
-        visualBoard[nextRow][nextCol].setAttribute("ondragover", "handleDragOver(event)");
-    });
-}
-
-function addPiece(pieceTuple, position){
+function placePieceImage(color, piece, position){
     let tile = visualBoard[position[0]][position[1]];
     let pieceImage = document.createElement("img");
-    if(pieceTuple[0] == RED){
-        pieceImage.setAttribute("id", "redPiece" + nextRedId);
-        if(pieceTuple[1] == STANDARD_PIECE){
-            pieceImage.setAttribute("src", RED_PIECE_IMAGE_PATH);
+    if(color == colors.white){
+        switch(piece){
+            case pieceTypes.pawn:
+                pieceImage.setAttribute("src", imagePaths.whitePawn);
+                break;
+            case pieceTypes.knight:
+                pieceImage.setAttribute("src", imagePaths.whiteKnight);
+                break;
+            case pieceTypes.bishop:
+                pieceImage.setAttribute("src", imagePaths.whiteBishop);
+                break;
+            case pieceTypes.rook:
+                pieceImage.setAttribute("src", imagePaths.whiteRook);
+                break;
+            case pieceTypes.queen:
+                pieceImage.setAttribute("src", imagePaths.whiteQueen);
+                break;
+            case pieceTypes.king:
+                pieceImage.setAttribute("src", imagePaths.whiteKing);
+                break;
         }
-        else{
-            pieceImage.setAttribute("src", KING_RED_PIECE_IMAGE_PATH);
-        }
-        nextRedId++;
     }
-    else if(pieceTuple[0] == BLACK){
-        pieceImage.setAttribute("id", "blackPiece" + nextBlackId);
-        if(pieceTuple[1] == STANDARD_PIECE){
-            pieceImage.setAttribute("src", BLACK_PIECE_IMAGE_PATH);
+    else if(color == colors.black){
+        switch(piece){
+            case pieceTypes.pawn:
+                pieceImage.setAttribute("src", imagePaths.blackPawn);
+                break;
+            case pieceTypes.knight:
+                pieceImage.setAttribute("src", imagePaths.blackKnight);
+                break;
+            case pieceTypes.bishop:
+                pieceImage.setAttribute("src", imagePaths.blackBishop);
+                break;
+            case pieceTypes.rook:
+                pieceImage.setAttribute("src", imagePaths.blackRook);
+                break;
+            case pieceTypes.queen:
+                pieceImage.setAttribute("src", imagePaths.blackQueen);
+                break;
+            case pieceTypes.king:
+                pieceImage.setAttribute("src", imagePaths.blackKing);
+                break;
         }
-        else{
-            pieceImage.setAttribute("src", KING_BLACK_PIECE_IMAGE_PATH);
-        }
-        nextBlackId++;
+    }
+    else{
+        console.log('PROBLEM');
     }
     tile.appendChild(pieceImage);
 }
 
-function removePiece(position){
+function removePieceImage(position){
     let tile = visualBoard[position[0]][position[1]];
-    tile.removeChild(tile.childNodes[0]);
-}
-
-function convertToKingPieceImage(position){
-
-    let tile = visualBoard[position[0]][position[1]];
-    tile.removeChild(tile.childNodes[0]);
-    if((board[position[0]][position[1]])[0] == RED){
-        let kingRedPieceImage = document.createElement("img");
-        kingRedPieceImage.setAttribute("src", KING_RED_PIECE_IMAGE_PATH);
-        kingRedPieceImage.setAttribute("id", "redKingPiece" + nextRedId);
-        nextRedId++;
-        tile.appendChild(kingRedPieceImage);
-    }
-    else{
-        let kingBlackPieceImage = document.createElement("img");
-        kingBlackPieceImage.setAttribute("src", KING_BLACK_PIECE_IMAGE_PATH);
-        kingBlackPieceImage.setAttribute("id", "blackKingPiece" + nextBlackId);
-        nextBlackId++;
-        tile.appendChild(kingBlackPieceImage);
+    if(tile.childElementCount > 0){
+        tile.removeChild(tile.childNodes[0]);
     }
 }
 
-function fadeBoard(){
-    let pageBoard = document.getElementById("board");
-    pageBoard.style.opacity = "0.3";
+function enableTile(position){
+    let tile = visualBoard[position[0]][position[1]];
+    tile.style.cursor = 'pointer';
 }
 
-function handleClick(id){
+function disableTile(position){
+    let tile = visualBoard[position[0]][position[1]];
+    tile.style.cursor = 'auto';
 }
 
-function handleDrag(event){
-    let tileId = event.target.parentElement.id;
-    event.dataTransfer.setData("previousTile", tileId);
-    event.dataTransfer.setData("pieceImage", event.target.id);
-
-    let row = parseInt(tileId.charAt(0));
-    let col = parseInt(tileId.charAt(1));
-    let currPosition = [row, col];
-    enableAttacks(currPosition);
+function openWhitePieceChooser(){
+    let box = document.getElementById("whiteChoosePieceBox");
+    box.style.display = "inline-flex";
 }
 
-function handleDragOver(event){
-    event.preventDefault();
+function openBlackPieceChooser(){
+    let box = document.getElementById("blackChoosePieceBox");
+    box.style.display = "inline-flex";
 }
 
-function handleDrop(event){
-    event.preventDefault();
-    let imageId = event.dataTransfer.getData("pieceImage");
-    let currTile = event.target;
-    currTile.appendChild(document.getElementById(imageId));
-
-    currTile.removeAttribute("ondrop")
-    currTile.removeAttribute("ondragover");
-
-    let previousTileId = event.dataTransfer.getData("previousTile");
-    let previousTile = document.getElementById(previousTileId);
-    previousTile.setAttribute("ondrop", "handleDrop(event)")
-    previousTile.setAttribute("ondragover", "handleDragOver(event)");
-
-    let startRow = parseInt(previousTileId.charAt(0));
-    let startCol = parseInt(previousTileId.charAt(1));
-    let startPosition = [startRow, startCol];
-
-    let currTileId = currTile.id;
-    let endRow = parseInt(currTileId.charAt(0));
-    let endCol = parseInt(currTileId.charAt(1));
-    let endPosition = [endRow, endCol];
-
-    move(startPosition, endPosition);
-}
-
-// LEFT OFF HERE; IMPLEMENT THIS FUNCTION THEN WORK ON AI
-function movePieceView(posOne, posTwo){
-    let tileOne = visualBoard[posOne[0]][posOne[1]];
-    let tileTwo = visualBoard[posTwo[0]][posTwo[1]];
-
-    removePiece(posOne);
-    addPiece(board[posTwo[0]][posTwo[1]], posTwo);
+function closeChoosers(){
+    let box = document.getElementById("whiteChoosePieceBox");
+    box.style.display = "none";
+    box = document.getElementById("blackChoosePieceBox");
+    box.style.display = "none";
 }

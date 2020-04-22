@@ -3,18 +3,22 @@
 
 <head>
     <link rel="stylesheet" href="style.css">
-    <script src="ai.js?1"></script>
-    <script src="checkers.js?3"></script>
+    <script src="chess.js?1"></script>
     <script src="view.js?1"></script>
+    <script src="controller.js?1"></script>
+    <script src="ai.js?1"></script>
+    <script src="move.js?1"></script>
+    <script src="player.js?1"></script>
+    <script src="setup.js?1"></script>
     <title>
-        CHECKERS - HOME PAGE
+        CHESS - HOME PAGE
     </title>
 </head>
 
 <body>
     <div id="content">
         <center><h1>
-            CHECKERS
+            CHESS
         </h1>
         <h2>
             HOME PAGE
@@ -24,95 +28,109 @@
             <img id="infoBoxRed">
             <img id="infoBoxBlack">
         </div>
-        <div id="winnersBox" style="display: none"></div>
-
+        <div id="winnersBox" style="display: none;"></div>
+        <br />
+        <div id="whiteChoosePieceBox" style="display: none;">
+            <img id="pawn" style="cursor: pointer;" src="Images/whitePawn.png" onclick="replacementPieceClicked(this.id)">
+            <img id="knight" style="cursor: pointer;" src="Images/whiteKnight.png" onclick="replacementPieceClicked(this.id)">
+            <img id="bishop" style="cursor: pointer;" src="Images/whiteBishop.png" onclick="replacementPieceClicked(this.id)">
+            <img id="rook" style="cursor: pointer;" src="Images/whiteRook.png" onclick="replacementPieceClicked(this.id)">
+            <img id="queen" style="cursor: pointer;" src="Images/whiteQueen.png" onclick="replacementPieceClicked(this.id)">
+        </div>
+        <div id="blackChoosePieceBox" style="display: none;">
+            <img id="pawn" style="cursor: pointer;" src="Images/blackPawn.png" onclick="replacementPieceClicked(this.id)">
+            <img id="knight" style="cursor: pointer;" src="Images/blackKnight.png" onclick="replacementPieceClicked(this.id)">
+            <img id="bishop" style="cursor: pointer;" src="Images/blackBishop.png" onclick="replacementPieceClicked(this.id)">
+            <img id="rook" style="cursor: pointer;" src="Images/blackRook.png" onclick="replacementPieceClicked(this.id)">
+            <img id="queen" style="cursor: pointer;" src="Images/blackQueen.png" onclick="replacementPieceClicked(this.id)">
+        </div>
         <div id="board">
             <div class="row">
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
             </div>
 
             <div class="row">
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
             </div>
 
             <div class="row">
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
             </div>
 
             <div class="row">
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
             </div>
 
             <div class="row">
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
             </div>
 
             <div class="row">
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
             </div>
 
             <div class="row">
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
             </div>
 
             <div class="row">
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
-                <div class="tile" onclick="handleClick(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
+                <div class="tile" onclick="tileClicked(this.id)"></div>
             </div>
         </div>
         </center>
