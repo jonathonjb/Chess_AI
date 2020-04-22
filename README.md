@@ -1,7 +1,7 @@
 # Chess_AI
 
 
-![Video of gameplay](http://imgur.com/a/5roxVn9)
+![Video of gameplay](http://imgur.com/a/5roxVn9.gif)
 
 I created a chess AI program which decides what move to make by using the minimax algorithm and the evaluation function. 
 
