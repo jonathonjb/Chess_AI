@@ -1,7 +1,6 @@
 # Chess_AI
-Short video of gameplay:
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/5roxVn9" data-context="false" ><a href="//imgur.com/a/5roxVn9"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+![Short video of gameplay](http://i.imgur.com/a/5roxVn9.gif)
 
 I created a chess AI program which decides what move to make by using the minimax algorithm and the evaluation function. 
 
