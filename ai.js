@@ -3,7 +3,7 @@ const DEPTH_LIMIT = 3;
 
 function aiMakeMove(){
     let boardCopy = createBoardCopy(logics.board);
-    let result = miniMax(aiColor, boardCopy, 0);
+    let result = miniMax(aiColor, boardCopy, 0, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
     let bestMove = result[1];
     let chosenPiece = getPiece(bestMove[0], logics.board);
     
@@ -33,17 +33,16 @@ function aiMakeMove(){
     endTurn();
 }
 
-// todo FINISH THIS FUNCTION!!!!!
 
-function miniMax(currColor, currBoard, depth){
+function miniMax(currColor, currBoard, depth, alpha, beta){
     if(depth >= DEPTH_LIMIT){
         return [evaluation(currBoard), null];
     }
 
-    let scores = [];
     let bestMove = null;
-    let bestScore = null;
-    let findHighestScore = currColor == aiColor ? true : false;
+    let maximizingPlayer = currColor == aiColor ? true : false;
+    let value = maximizingPlayer ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+    let scores = [];
 
     let children = getChildren(currColor, currBoard);
     for(let i = 0; i < children.length; i++){
@@ -52,23 +51,36 @@ function miniMax(currColor, currBoard, depth){
 
         let nextColor = currColor == colors.white ? colors.black : colors.white;
 
-        let result = miniMax(nextColor, child[0], depth + 1);
+        let result = miniMax(nextColor, child[0], depth + 1, alpha, beta);
         scores.push(result[0]);
 
-        if(findHighestScore && (bestScore == null || result[0] > bestScore)){
-            bestScore = result[0];
-            bestMove = move;
+        if(maximizingPlayer){
+            if(result[0] > value){
+                value = result[0];
+                bestMove = move;
+            }
+            alpha = Math.max(alpha, value);
+            if(alpha >= beta){
+                break;
+            }
         }
-        else if(!findHighestScore && (bestScore == null || result[0] < bestScore)){
-            bestScore = result[0];
-            bestMove = move;
+        else{
+            if(result[0] < value){
+                value = result[0];
+                bestMove = move;
+            }
+            beta = Math.min(beta, value);
+            if(alpha >= beta){
+                break;
+            }
         }
     }
 
-    /*console.log('curr color: ' + currColor);
-    console.log('scores: ' + scores);
-    console.log('chosen ' + bestScore);*/
-    return [bestScore, bestMove];
+    console.log('curr color: ' + currColor);
+    console.log('scores: ');
+    console.log(scores);
+    console.log('chosen ' + value);
+    return [value, bestMove];
 }
 
 

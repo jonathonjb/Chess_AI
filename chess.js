@@ -113,7 +113,6 @@ function checkForCheckmate(currColor, currBoard){
 
 function checkForThreat(currColor, currBoard){
     let enemyColor = currColor == colors.white ? colors.black : colors.white;
-    console.log('HERE');
     let enemyMoves = getCurrMoves(enemyColor, currBoard);
     let kingPosition = getKingPosition(currColor, currBoard);
 
