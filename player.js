@@ -4,8 +4,15 @@ let chosenPiecePosition = null
 let replacementPiecePosition = null
 
 function choosePiece(position){
+    enablePieces();
     chosenPiecePosition = position;
     chosenPiece = logics.board[position[0]][position[1]];
+
+    moves = getPieceMoves(chosenPiece, chosenPiecePosition, logics.board);
+    for(let i = 0; i < moves.length; i++){
+        let currMove = moves[i];
+        enableTile(currMove);
+    }
 }
 
 function chooseMove(position){
@@ -27,11 +34,11 @@ function chooseMove(position){
                 removePieceImage(position);
             }
 
-            // checks if we're using the en passant rule; if so, removes the opponent's pawn
+            // checks if we're attacking the piece that just executed the en passant; if so, removes the opponent's pawn
             if(chosenPiece[1] == pieceTypes.pawn && getPiece(position, logics.board) == enPassantVulnerable){
                 let oppPawnRow = userColor == colors.white ? position[0] + 1 : position[0] - 1;
                 let oppPawnPos = [oppPawnRow, position[1]];
-                removePieceImage(oppPawnPos);
+                removePieceImage(oppPawnPos); 
                 logics.board[oppPawnPos[0]][oppPawnPos[1]] = null;
             }
 
@@ -77,13 +84,17 @@ function enablePieces(){
     for(let row = 0; row < logics.size; row++){
         for(let col = 0; col < logics.size; col++){
             let pieceTuple = logics.board[row][col];
+            let position = [row, col];
             if(pieceTuple == null){
+                disableTile(position);
                 continue;
             }
             let color = pieceTuple[0];
-            let position = [row, col];
             if(color == userColor){
                 enableTile(position);
+            }
+            else{
+                disableTile(position);
             }
         }
     }

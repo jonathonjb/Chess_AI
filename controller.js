@@ -22,9 +22,6 @@ function tileClicked(id){
 
 function replacementPieceClicked(id){
     switch(id){
-        case "pawn":
-            chooseReplacementPiece(pieceTypes.pawn);
-            break;
         case "knight":
             chooseReplacementPiece(pieceTypes.knight);
             break;

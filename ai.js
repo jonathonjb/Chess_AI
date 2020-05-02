@@ -42,7 +42,6 @@ function miniMax(currColor, currBoard, depth, alpha, beta){
     let bestMove = null;
     let maximizingPlayer = currColor == aiColor ? true : false;
     let value = maximizingPlayer ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
-    let scores = [];
 
     let children = getChildren(currColor, currBoard);
     for(let i = 0; i < children.length; i++){
@@ -50,9 +49,7 @@ function miniMax(currColor, currBoard, depth, alpha, beta){
         let move = [child[1], child[2]];
 
         let nextColor = currColor == colors.white ? colors.black : colors.white;
-
         let result = miniMax(nextColor, child[0], depth + 1, alpha, beta);
-        scores.push(result[0]);
 
         if(maximizingPlayer){
             if(result[0] > value){
@@ -60,9 +57,6 @@ function miniMax(currColor, currBoard, depth, alpha, beta){
                 bestMove = move;
             }
             alpha = Math.max(alpha, value);
-            if(alpha >= beta){
-                break;
-            }
         }
         else{
             if(result[0] < value){
@@ -70,16 +64,11 @@ function miniMax(currColor, currBoard, depth, alpha, beta){
                 bestMove = move;
             }
             beta = Math.min(beta, value);
-            if(alpha >= beta){
-                break;
-            }
+        }
+        if(alpha >= beta){
+            break;
         }
     }
-
-    console.log('curr color: ' + currColor);
-    console.log('scores: ');
-    console.log(scores);
-    console.log('chosen ' + value);
     return [value, bestMove];
 }
 
