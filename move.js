@@ -9,7 +9,6 @@ function movePiece(startPosition, endPosition, currBoard){
         console.log(currBoard);
         return;
     }*/
-
     removeEnPassantVulnerables(currBoard);
 
     //console.log('MOVING FROM ' + startPosition + " to " + endPosition);
