@@ -1,11 +1,16 @@
 function movePiece(startPosition, endPosition, currBoard){
-    removeEnPassantVulnerables(currBoard);
-
     let piece = getPiece(startPosition, currBoard);
+
+    // checks if we're attacking the piece that just executed the en passant; if so, removes the opponent's pawn
+    if(piece[1] == pieceTypes.pawn && getPiece(endPosition, currBoard) == enPassantVulnerable){
+        let oppPawnRow = piece[0] == colors.white ? endPosition[0] + 1 : endPosition[0] - 1;
+        let oppPawnPos = [oppPawnRow, endPosition[1]];
+        currBoard[oppPawnPos[0]][oppPawnPos[1]] = null;
+    }
+    removeEnPassantVulnerables(currBoard);
     currBoard[startPosition[0]][startPosition[1]] = null;
     currBoard[endPosition[0]][endPosition[1]] = piece;
     piece[2] = moveChecks.hasMoved;
-
 
     // if the move was a castling move, then it also moves the rook
     if(piece[1] == pieceTypes.king && Math.abs(startPosition[1] - endPosition[1]) > 1){
@@ -28,13 +33,6 @@ function movePiece(startPosition, endPosition, currBoard){
     if(piece[1] == pieceTypes.pawn && Math.abs(startPosition[0] - endPosition[0]) == 2){
         let additon = piece[0] == colors.white ? 1 : -1;
         currBoard[endPosition[0] + additon][endPosition[1]] = enPassantVulnerable;
-    }
-
-    // checks if we're attacking the piece that just executed the en passant; if so, removes the opponent's pawn
-    if(piece[1] == pieceTypes.pawn && getPiece(endPosition, currBoard) == enPassantVulnerable){
-        let oppPawnRow = userColor == colors.white ? endPosition[0] + 1 : endPosition[0] - 1;
-        let oppPawnPos = [oppPawnRow, endPosition[1]];
-        currBoard[oppPawnPos[0]][oppPawnPos[1]] = null;
     }
 }
 
@@ -132,6 +130,13 @@ function getPawnMoves(position, currBoard){
     let nextPostition = [row + (1 * multiplier), col];
     if(isEmpty(nextPostition, currBoard)){
         moves.push(nextPostition);
+
+        // checks if double space moves are possible
+        nextPostition = [row + (2 * multiplier), col];
+        let rowCheck = currentTurn == colors.white ? 6 : 1;
+        if(rowCheck == row && isEmpty(nextPostition, currBoard)){
+            moves.push(nextPostition);
+        }
     }
 
     // checks if pawn can attack left (for white)
@@ -150,13 +155,6 @@ function getPawnMoves(position, currBoard){
         if(piece == enPassantVulnerable || piece[0] != currentTurn){
             moves.push(nextPostition);
         }
-    }
-
-    // checks if double space moves are possible
-    nextPostition = [row + (2 * multiplier), col];
-    let rowCheck = currentTurn == colors.white ? 6 : 1;
-    if(rowCheck == row && isEmpty(nextPostition, currBoard)){
-        moves.push(nextPostition);
     }
 
     return moves;
