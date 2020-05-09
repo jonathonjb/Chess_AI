@@ -36,37 +36,9 @@ function chooseMove(position){
     if(checkForThreat(userColor, boardCopy)){
         return;
     }
-
-    // checks if there is an enemy at that position; if so, remove the piece
-    if(!isEmpty(position, logics.board)){
-        removePieceImage(position);
-    }
-
-    // checks if we're attacking the piece that just executed the en passant; if so, removes the opponent's pawn
-    if(chosenPiece[1] == pieceTypes.pawn && getPiece(position, logics.board) == enPassantVulnerable){
-        let oppPawnRow = userColor == colors.white ? position[0] + 1 : position[0] - 1;
-        let oppPawnPos = [oppPawnRow, position[1]];
-        removePieceImage(oppPawnPos); 
-        logics.board[oppPawnPos[0]][oppPawnPos[1]] = null;
-    }
-
-    // checks if the move was a castle
-    if(chosenPiece[1] == pieceTypes.king && Math.abs(position[1] - chosenPiecePosition[1]) > 1){
-        // kingside castling
-        if(position[1] == 6){
-            removePieceImage([position[0], 7]);
-            placePieceImage(userColor, pieceTypes.rook, [position[0], 5]);
-        }
-
-        // queenside castling
-        if(position[1] == 2){
-            removePieceImage([position[0], 0]);
-            placePieceImage(userColor, pieceTypes.rook, [position[0], 3]);
-        }
-    }
-    placePieceImage(userColor, chosenPiece[1], position);
-    removePieceImage(chosenPiecePosition);
+    
     movePiece(chosenPiecePosition, position, logics.board);
+    makeViewMatchBoard();
 
     chosenPiece = null;
     chosenPiecePosition = null;

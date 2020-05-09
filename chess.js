@@ -57,13 +57,14 @@ function startTurn(){
         aiMakeMove();
     }
     else{
-        console.log("PROBLEM");
+        console.log("PROBLEM STARTING TURN");
     }
 }
 
 function endTurn(){
     if(checkForCheckmate(logics.currentTurn, logics.board)){
         console.log('GAME OVER - WINNER');
+        return;
     }
 
     logics.currentTurn = logics.currentTurn == colors.white ? colors.black : colors.white;

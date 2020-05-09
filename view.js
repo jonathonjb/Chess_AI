@@ -47,6 +47,28 @@ function initializeView(){
     //initializeInfoBox();
 }
 
+function makeViewMatchBoard(){
+    clearBoard();
+    for(let row = 0; row < logics.size; row++){
+        for(let col = 0; col < logics.size; col++){
+            position = [row, col];
+            if(!isEmpty(position, logics.board)){
+                let piece = getPiece(position, logics.board);
+                placePieceImage(piece[0], piece[1], position);
+            }
+        }
+    }
+}
+
+function clearBoard(){
+    for(let row = 0; row < logics.size; row++){
+        for(let col = 0; col < logics.size; col++){
+            position = [row, col];
+            removePieceImage(position);
+        }
+    }
+}
+
 function placePieceImage(color, piece, position){
     let tile = visualBoard[position[0]][position[1]];
     let pieceImage = document.createElement("img");
@@ -93,9 +115,6 @@ function placePieceImage(color, piece, position){
                 pieceImage.setAttribute("src", imagePaths.blackKing);
                 break;
         }
-    }
-    else{
-        console.log('PROBLEM');
     }
     tile.appendChild(pieceImage);
 }

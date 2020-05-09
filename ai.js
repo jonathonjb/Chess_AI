@@ -4,32 +4,9 @@ const DEPTH_LIMIT = 3;
 function aiMakeMove(){
     let boardCopy = createBoardCopy(logics.board);
     let result = miniMax(aiColor, boardCopy, 0, Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
-    let bestMove = result[1];
-    let chosenPiece = getPiece(bestMove[0], logics.board);
-    
-    // checks if there is an enemy at that position; if so, remove the piece
-    if(!isEmpty(bestMove[1], logics.board)){
-        removePieceImage(bestMove[1]);
-    }
-
-    // checks if the move was a castle
-    if(chosenPiece[1] == pieceTypes.king && Math.abs(bestMove[1][1] - bestMove[0][1]) > 1){
-        // kingside castling
-        if(bestMove[1][1] == 6){
-            removePieceImage([bestmove[1][0], 7]);
-            placePieceImage(aiColor, pieceTypes.rook, [bestMove[1][0], 5]);
-        }
-
-        // queenside castling
-        if(bestMove[1][1] == 2){
-            removePieceImage([bestMove[1][0], 0]);
-            placePieceImage(aiColor, pieceTypes.rook, [bestmove[1][0], 3]);
-        }
-    }
-    placePieceImage(aiColor, chosenPiece[1], bestMove[1]);
-    removePieceImage(bestMove[0]);
+    let bestMove = result[1]; // a list of two items; the starting position and the end position
     movePiece(bestMove[0], bestMove[1], logics.board);
-
+    makeViewMatchBoard()
     endTurn();
 }
 
@@ -71,7 +48,6 @@ function miniMax(currColor, currBoard, depth, alpha, beta){
     }
     return [value, bestMove];
 }
-
 
 /** returns a list of elements; each element is a list of 3 items. 
  *  1: modified copy of current board; the board after the move

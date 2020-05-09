@@ -1,19 +1,7 @@
 function movePiece(startPosition, endPosition, currBoard){
-    /**if(startPosition == null || endPosition == null){
-        console.log("Problem; for some reason, position is null");
-        console.log("Start position: ");
-        console.log(startPosition);
-        console.log("End position: " );
-        console.log(endPosition);
-        console.log("Board: ");
-        console.log(currBoard);
-        return;
-    }*/
     removeEnPassantVulnerables(currBoard);
 
-    //console.log('MOVING FROM ' + startPosition + " to " + endPosition);
     let piece = getPiece(startPosition, currBoard);
-    //console.log("GOT PIECE");
     currBoard[startPosition[0]][startPosition[1]] = null;
     currBoard[endPosition[0]][endPosition[1]] = piece;
     piece[2] = moveChecks.hasMoved;
@@ -25,7 +13,6 @@ function movePiece(startPosition, endPosition, currBoard){
         if(endPosition[1] == 6){
             currBoard[endPosition[0]][5] = currBoard[endPosition[0]][7];
             getPiece([endPosition[0], 5], currBoard)[2] = moveChecks.hasMoved;
-            //currBoard[endPosition[0]][5][2] = moveChecks.hasMoved;
             currBoard[endPosition[0]][7] = null;
         }
 
@@ -33,7 +20,6 @@ function movePiece(startPosition, endPosition, currBoard){
         if(endPosition[1] == 2){
             currBoard[endPosition[0]][3] = currBoard[endPosition[0]][0];
             getPiece([endPosition[0], 3], currBoard)[2] = moveChecks.hasMoved;
-            //currBoard[endPosition[0]][3][2] = moveChecks.hasMoved;
             currBoard[endPosition[0]][0] = null;
         }
     }
@@ -42,6 +28,13 @@ function movePiece(startPosition, endPosition, currBoard){
     if(piece[1] == pieceTypes.pawn && Math.abs(startPosition[0] - endPosition[0]) == 2){
         let additon = piece[0] == colors.white ? 1 : -1;
         currBoard[endPosition[0] + additon][endPosition[1]] = enPassantVulnerable;
+    }
+
+    // checks if we're attacking the piece that just executed the en passant; if so, removes the opponent's pawn
+    if(piece[1] == pieceTypes.pawn && getPiece(endPosition, currBoard) == enPassantVulnerable){
+        let oppPawnRow = userColor == colors.white ? endPosition[0] + 1 : endPosition[0] - 1;
+        let oppPawnPos = [oppPawnRow, endPosition[1]];
+        currBoard[oppPawnPos[0]][oppPawnPos[1]] = null;
     }
 }
 
