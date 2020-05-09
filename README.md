@@ -15,7 +15,6 @@ BUGS / ERRORS / FEATURES TO BE ADDED
 --------------
 This project isn't competely done yet; there are still a few bugs which needs to be fixed.
 
-- The en passant rule is a bit buggy; sometimes it causes the program to crash. 
 - Tie games are not added yet. When there aren't any moves left to be made at the end of your turn, you win the game.
 - The ability to switch teams has not been added yets
 - The AI never castles their king; need to modify their evaluation function to give castling king a higher score
