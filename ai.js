@@ -65,7 +65,9 @@ function getChildren(currColor, currBoard){
             let startPosition = pieceMoves[0];
             let endPosition = pieceMoves[1][j];
             movePiece(startPosition, endPosition, boardCopy);
-            children.push([boardCopy, startPosition, endPosition]);
+            if(!checkForThreat(currColor, boardCopy)){
+                children.push([boardCopy, startPosition, endPosition]);
+            }
         }
     }
 
