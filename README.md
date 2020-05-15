@@ -4,7 +4,7 @@ Short video of gameplay:
 
 http://imgur.com/a/5roxVn9.gif
 
-I created a chess AI program which decides what move to make by using the minimax algorithm and the evaluation function. 
+I created a chess AI program which decides what move to make by using the minimax algorithm, which was optimized using alpha/beta pruning and the evaluation functions.
 
 For this project, I used a 2D array to store all of the pieces info, and in the minimax algorithm, I created a deep copy of the 2D array for each move/child boards. 
 
