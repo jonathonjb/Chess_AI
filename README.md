@@ -8,8 +8,9 @@ I created a chess AI program which decides what move to make by using the minima
 
 For this project, I used a 2D array to store all of the pieces info, and in the minimax algorithm, I created a deep copy of the 2D array for each move/child boards. 
 
-I realize that using a 2D array to store the pieces and creating a new copy of the board for each possible move is very inefficient. For this project, it is able to check every moves for the next 3 turns in a reasonable amount of time. Any more than that would take the program too long though.
-If I had to start on this project all over again, I'd use maps instead of 2D arrays to store the pieces info. 
+I realize that using a 2D array to store the pieces and creating a new copy of the board for each possible move is very inefficient. The AI used for this project  is able to check every moves for the next 4 turns in a reasonable amount of time. Any more than that would take the program too long.
+
+If I had to start on this project all over again, I'd use maps instead of 2D arrays to store the pieces info.
 
 BUGS / ERRORS / FEATURES TO BE ADDED
 --------------
